@@ -33,7 +33,7 @@ For Example:
     }, imageDataInBase64, 0.5, 0.5, {resizeType:ImageResizer.RESIZE_TYPE_FACTOR ,format:'jpg'});
 	
 ### resizeImage Doc ###
-
+<pre>
   param success success callback, will receive the data sent from the native plugin
   param fail error callback, will receive an error string describing what went wrong
   param imageData The image data, either base64 or local url
@@ -48,11 +48,11 @@ For Example:
                imageData : Base64 of the resized image
                height : height of the resized image
                width: width of the resized image
- 
+</pre> 
 
 ### getImageSize Doc ###
-
-  Get an image width and height
+Get an image width and height
+<pre>
   param success success callback, will receive the data sent from the native plugin
   param fail error callback, will receive an error string describing what went wrong
   param imageData The image data, either base64 or local url
@@ -61,10 +61,12 @@ For Example:
   returns JSON Object with the following parameters:
                height : height of the image
                width: width of the image
- 
+</pre> 
 
 ### storeImage ###
-  Store an image locally
+
+Store an image locally
+<pre>
   param success success callback, will receive the data sent from the native plugin
   param fail error callback, will receive an error string describing what went wrong
   param imageData The image data, either base64 or local url
@@ -76,7 +78,7 @@ For Example:
               quality : INTEGER, compression quality - defaults to 100
   returns JSON Object with the following parameters:
               url : URL of the file just stored
-  
+</pre>  
 
 ## RELEASE NOTES ##
 

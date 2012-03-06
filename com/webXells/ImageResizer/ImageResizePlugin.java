@@ -8,7 +8,7 @@
  * The software is open source, MIT Licensed.
  * Copyright (C) 2012, webXells GmbH All Rights Reserved.
  * 
- * @author Raanan Weber, webXells GmbH
+ * @author Raanan Weber, webXells GmbH, http://www.webxells.com
  */
 package com.webXells.ImageResizer;
 

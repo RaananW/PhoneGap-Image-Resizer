@@ -5,7 +5,7 @@
  * The software is open source, MIT licensed.
  * Copyright (C) 2012, webXells GmbH All Rights Reserved.
  * 
- * Raanan Weber, webXells GmbH
+ * Raanan Weber, webXells GmbH http://www.webxells.com
  */
 
 var ImageResizer = function() {

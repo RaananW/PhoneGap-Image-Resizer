@@ -85,7 +85,7 @@ Initial Release, For Now Only Android Plugin was uploaded, iOS coming soon.
 
 ### The MIT License
 
-Copyright (c) <2011> James Hornitzky
+Copyright (c) <2012> Raanan Weber, webXells GmbH
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal

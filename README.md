@@ -6,7 +6,7 @@ The plugin will resize images natively using phonegap's plugin architecture
 
 Using this plugin requires [PhoneGap](http://github.com/phonegap).
 
-1. To install the plugin, copy imageresize.js to your project's www folder and include it in your html file after phonegap.js.
+1. To install the plugin, copy imageresize.js to your project's www folder and include it in your html file after phonegap.js. The file is compatible with both iOS and Android (was not tested with others).
 
     &lt;script type="text/javascript" charset="utf-8" src="phonegap.js"&gt;&lt;/script&gt;<br/>
     &lt;script type="text/javascript" charset="utf-8" src="imageresize.js"&gt;&lt;/script&gt;
@@ -25,12 +25,30 @@ The plugin creates the object `window.plugins.imageResizer`.  To use, call one o
 </pre>
 
 For Example:
-
+<pre>
     window.plugins.imageResizer.resizeImage(
 
     function(data) { console.log(data.imageData); }, function (error) {
         console.log("Error : \r\n" + error);
     }, imageDataInBase64, 0.5, 0.5, {resizeType:ImageResizer.RESIZE_TYPE_FACTOR ,format:'jpg'});
+</pre>
+
+### Android quirks and howto's ###
+
+The storeImage funtion will always store the image to the device's default external storage, under the given Directory and filename. the photoAlbum property will be ignored.
+
+### iOS quirks and howto's ###
+
+For a full iOS integration, two extra extensions should be used:
+1. Base64 Encoder/Decoder using Dave Wimer implementation (Sadly i couldn't find a link to the original code. If found, please let me know)
+2. Image Scaling for UIImage (Using the great howto guide here : http://iphonedevelopertips.com/graphics/how-to-scale-an-image-using-an-objective-c-category.html )
+The sources are added to the github.
+
+The storeImage funtion in iOS saves either in the photo album, or in the application's temporary directory. 
+In the first case (photo album is set to true), the filename and directory will be completly ignored. A filename will be decided by iOS itself.
+In the second case, only filename will be used and directory will be ignored.
+	
+## JavaScript doc ##
 	
 ### resizeImage Doc ###
 <pre>

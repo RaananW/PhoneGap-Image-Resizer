@@ -1,6 +1,6 @@
 # Image Resizer plugin for Phonegap #
 
-The plugin will resize images natively for a phonegap project.
+The plugin will resize images natively using phonegap's plugin architecture
 
 ## Adding the Plugin to your project ##
 
@@ -11,8 +11,8 @@ Using this plugin requires [PhoneGap](http://github.com/phonegap).
     &lt;script type="text/javascript" charset="utf-8" src="phonegap.js"&gt;&lt;/script&gt;<br/>
     &lt;script type="text/javascript" charset="utf-8" src="imageresize.js"&gt;&lt;/script&gt;
 
-2a. For Android: Create a new package within your project called "com.webXells.ImageResizer" and move ImageResizePlugin.java into it.
-2b. For iOS : Coming soon, sorry guys :-)
+2. For Android: Create a new package within your project called "com.webXells.ImageResizer" and move ImageResizePlugin.java into it.
+3. For iOS : Coming soon, sorry guys :-)
 
 ## Using the plugin ##
 

@@ -19,9 +19,9 @@ Using this plugin requires [PhoneGap](http://github.com/phonegap).
 The plugin creates the object `window.plugins.imageResizer`.  To use, call one of the following, available methods:
 
 <pre>
-   window.plugins.CallLog.resizeImage(successCallBack, failCallBack, imageData, width, height, options);
-   window.plugins.CallLog.getImageSize(successCallBack, failCallBack, imageData, options);
-   window.plugins.CallLog.storeImage(successCallBack, failCallBack, imageData, options);
+   window.plugins.imageResizer.resizeImage(successCallBack, failCallBack, imageData, width, height, options);
+   window.plugins.imageResizer.getImageSize(successCallBack, failCallBack, imageData, options);
+   window.plugins.imageResizer.storeImage(successCallBack, failCallBack, imageData, options);
 </pre>
 
 For Example:

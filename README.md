@@ -8,10 +8,13 @@ Using this plugin requires [PhoneGap](http://github.com/phonegap).
 
 1. To install the plugin, copy imageresize.js to your project's www folder and include it in your html file after phonegap.js. The file is compatible with both iOS and Android (was not tested with others).
 
-    &lt;script type="text/javascript" charset="utf-8" src="phonegap.js"&gt;&lt;/script&gt;<br/>
+    &lt;script type="text/javascript" charset="utf-8" src="cordova???.js"&gt;&lt;/script&gt;<br/>
     &lt;script type="text/javascript" charset="utf-8" src="imageresize.js"&gt;&lt;/script&gt;
 
-2. For Android: Create a new package within your project called "com.webXells.ImageResizer" and move ImageResizePlugin.java into it.
+2. For Android: Create a new package within your project called "com.webXells.ImageResizer" and move ImageResizePlugin.java into it. The add the following line to your config.xml (or for older phonegap in plugin.xml) : 
+<pre>
+    &lt;plugin name="com.webXells.imageResizer" value="com.webXells.ImageResizer.ImageResizePlugin" /&gt;
+</pre>
 3. For iOS : use the source from the iphone directory
 
 ## Using the plugin ##

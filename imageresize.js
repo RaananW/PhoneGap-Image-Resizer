@@ -1,5 +1,5 @@
 /**
- * An Image Resizer Plugin for PhoneGap.
+ * An Image Resizer Plugin for PhoneGap. Updated to fit Cordova 2+
  * The JavaScript based plugin fits both the Android and the iOS native plugins.
  * 
  * The software is open source, MIT licensed.
@@ -51,7 +51,7 @@ ImageResizer.prototype.resizeImage = function(success, fail, imageData, width,
         quality : options.quality ? options.quality : 70
     };
 
-    return PhoneGap.exec(success, fail, "com.webXells.imageResizer",
+    return cordova.exec(success, fail, "com.webXells.imageResizer",
             "resizeImage", [params]);
 }
 /**
@@ -74,7 +74,7 @@ ImageResizer.prototype.getImageSize = function(success, fail, imageData,
         data : imageData,
         imageDataType : options.imageType 
     };
-    return PhoneGap.exec(success, fail, "com.webXells.imageResizer",
+    return cordova.exec(success, fail, "com.webXells.imageResizer",
             "imageSize", [params]);
 }
 
@@ -108,19 +108,15 @@ ImageResizer.prototype.storeImage = function(success, fail, imageData, options) 
 		photoAlbum : options.photoAlbum ? options.photoAlbum : true
     };
 
-    return PhoneGap.exec(success, fail, "com.webXells.imageResizer",
+    return cordova.exec(success, fail, "com.webXells.imageResizer",
             "storeImage", [params]);
 }
 
-PhoneGap.addConstructor(function() {
-	//is it iOS
-	if(device.platform.indexOf("iPhone") != -1) {
-		if(!window.plugins) {
-			window.plugins = {};
-		}
-		window.plugins.imageResizer = new ImageResizer();
-	} else {
-		PhoneGap.addPlugin('imageResizer', new ImageResizer());
-	}
-	console.log("Image Resizer Registered under window.plugins.imageResizer");
+cordova.addConstructor(function() {
+	window.imageResizer = new ImageResizer();
+
+	// backwards compatibility	
+	window.plugins = window.plugins || {};
+	window.plugins.imageResizer = window.imageResizer;
+	console.log("Image Resizer Registered under window.imageResizer");
 });

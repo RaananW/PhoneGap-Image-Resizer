@@ -1,5 +1,5 @@
 /**
- * An Image Resizer Plugin for PhoneGap.
+ * An Image Resizer Plugin for Cordova/PhoneGap.
  * 
  * More Information : https://github.com/raananw/
  * 
@@ -19,6 +19,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.apache.cordova.api.Plugin;
+import org.apache.cordova.api.PluginResult;
+import org.apache.cordova.api.PluginResult.Status;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,11 +30,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.Environment;
-
-import com.mobileappz.ImageResizer.Base64;
-import com.phonegap.api.Plugin;
-import com.phonegap.api.PluginResult;
-import com.phonegap.api.PluginResult.Status;
+import android.util.Base64;
 
 public class ImageResizePlugin extends Plugin {
 
@@ -85,7 +84,7 @@ public class ImageResizePlugin extends Plugin {
 
 				//Pixels or Factor resize
 				String resizeType = params.getString("resizeType");
-				
+
 				//Get width and height parameters
 				double width = params.getDouble("width");
 				double height = params.getDouble("height");
@@ -107,7 +106,7 @@ public class ImageResizePlugin extends Plugin {
 					resized.compress(Bitmap.CompressFormat.JPEG, quality, baos);
 				}
 				byte[] b = baos.toByteArray();
-				String returnString = Base64.encodeBytes(b);
+				String returnString = Base64.encodeToString(b, Base64.DEFAULT);
 				//return object
 				JSONObject res = new JSONObject();
 				res.put("imageData", returnString);
@@ -137,7 +136,7 @@ public class ImageResizePlugin extends Plugin {
 				directory = directory.startsWith("/") ? directory : "/"
 						+ directory;
 				int quality = params.getInt("quality");
-				
+
 				OutputStream outStream;
 				//store the file locally using the external storage directory
 				File file = new File(Environment.getExternalStorageDirectory()
@@ -185,7 +184,7 @@ public class ImageResizePlugin extends Plugin {
 			throws IOException {
 		Bitmap bmp;
 		if (imageDataType.equals(IMAGE_DATA_TYPE_BASE64)) {
-			byte[] blob = Base64.decode(imageData);
+			byte[] blob = Base64.decode(imageData, Base64.DEFAULT);
 			bmp = BitmapFactory.decodeByteArray(blob, 0, blob.length);
 		} else {
 			File imagefile = new File(imageData);

@@ -1,6 +1,6 @@
 # Image Resizer plugin for Phonegap #
 
-The plugin will resize images natively using phonegap's plugin architecture
+The plugin will resize images natively using phonegap/cordova's plugin architecture
 
 ## Adding the Plugin to your project ##
 
@@ -12,28 +12,34 @@ Using this plugin requires [PhoneGap](http://github.com/phonegap).
     &lt;script type="text/javascript" charset="utf-8" src="imageresize.js"&gt;&lt;/script&gt;
 
 2. For Android: Create a new package within your project called "com.webXells.ImageResizer" and move ImageResizePlugin.java into it.
-3. For iOS : Coming soon, sorry guys :-)
+3. For iOS : use the source from the iphone directory
 
 ## Using the plugin ##
 
-The plugin creates the object `window.plugins.imageResizer`.  To use, call one of the following, available methods:
+The plugin creates the object `window.imageResizer`. For backward support, `window.plugins.imageResizer` still works.
+
+To use, call one of the following, available methods:
 
 <pre>
-   window.plugins.imageResizer.resizeImage(successCallBack, failCallBack, imageData, width, height, options);
-   window.plugins.imageResizer.getImageSize(successCallBack, failCallBack, imageData, options);
-   window.plugins.imageResizer.storeImage(successCallBack, failCallBack, imageData, options);
+   window.imageResizer.resizeImage(successCallBack, failCallBack, imageData, width, height, options);
+   window.imageResizer.getImageSize(successCallBack, failCallBack, imageData, options);
+   window.imageResizer.storeImage(successCallBack, failCallBack, imageData, options);
 </pre>
 
 For Example:
 <pre>
-    window.plugins.imageResizer.resizeImage(
-
-    function(data) { console.log(data.imageData); }, function (error) {
+    window.imageResizer.resizeImage(
+      function(data) { 
+        var image = document.getElementById('myImage');
+        image.src = "data:image/jpeg;base64," + data.imageData; 
+      }, function (error) {
         console.log("Error : \r\n" + error);
-    }, imageDataInBase64, 0.5, 0.5, {resizeType:ImageResizer.RESIZE_TYPE_FACTOR ,format:'jpg'});
+      }, imageDataInBase64, 0.5, 0.5, {resizeType:ImageResizer.RESIZE_TYPE_FACTOR ,format:'jpg'});
 </pre>
 
 ### Android quirks and howto's ###
+
+Android 2.2+ is supported
 
 The storeImage funtion will always store the image to the device's default external storage, under the given Directory and filename. the photoAlbum property will be ignored.
 

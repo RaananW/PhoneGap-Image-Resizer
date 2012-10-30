@@ -109,6 +109,9 @@ Store an image locally
 
 ## RELEASE NOTES ##
 
+### 27/10/2012 ###
+Updated to cordova 2.1, both js and android , iOS not yet.
+
 ### 6/3/2012 ###
 Initial Release, For Now Only Android Plugin was uploaded, iOS coming soon.
 

@@ -5,7 +5,7 @@
 //  Created by Raanan Weber on 02.01.12.
 // 
 //  The software is open source, MIT Licensed.
-//  Copyright (c) 2012 webXells GmbH , http://www.webxells.com. All rights reserved.
+//  Copyright (c) 2012-2013 webXells GmbH , http://www.webxells.com. All rights reserved.
 //
 //  Using the following Libraries (Big thanks to the developers!)
 //  Image Scaling : http://iphonedevelopertips.com/graphics/how-to-scale-an-image-using-an-objective-c-category.html . Source is added with respected copyright.
@@ -13,9 +13,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <PhoneGap/PGPlugin.h>
+#import <Cordova/CDV.h>
 
-@interface ImageResize : PGPlugin {
+@interface ImageResize : CDVPlugin {
     
     NSString* callbackID;  
     
@@ -25,10 +25,10 @@
 
 //Instance Method  
 
-- (void) resizeImage:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options;
-- (void) imageSize:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options ;
-- (void) storeImage:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options ;
+- (void) resizeImage:(CDVInvokedUrlCommand*)command;
+- (void) imageSize:(CDVInvokedUrlCommand*)command;
+- (void) storeImage:(CDVInvokedUrlCommand*)command;
 - (void) imageSavedToPhotosAlbum:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)none;
-- (UIImage*) getImageUsingOptions:(NSMutableDictionary*)options;
+- (UIImage*) getImageUsingOptions:(NSDictionary*)options;
 
 @end

@@ -19,9 +19,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.apache.cordova.api.Plugin;
-import org.apache.cordova.api.PluginResult;
-import org.apache.cordova.api.PluginResult.Status;
+import org.apache.cordova.api.CallbackContext;
+import org.apache.cordova.api.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,8 +30,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.Environment;
 import android.util.Base64;
+import android.util.Log;
 
-public class ImageResizePlugin extends Plugin {
+public class ImageResizePlugin extends CordovaPlugin {
 
 	public static String IMAGE_DATA_TYPE_BASE64 = "base64Image";
 	public static String IMAGE_DATA_TYPE_URL = "urlImage";
@@ -47,45 +47,48 @@ public class ImageResizePlugin extends Plugin {
 	public static String DEFAULT_RESIZE_TYPE = RESIZE_TYPE_FACTOR;
 
 	@Override
-	public PluginResult execute(String action, JSONArray data, String callbackId) {
-		PluginResult result = null;
-
+	public boolean execute(String action, JSONArray data,
+			CallbackContext callbackContext) {
 		JSONObject params;
 		String imageData;
 		String imageDataType;
 		String format;
 		Bitmap bmp;
+		Log.d("PLUGIN", action);
 		try {
-			//parameters (forst object of the json array)
+			// parameters (forst object of the json array)
 			params = data.getJSONObject(0);
-			//image data, either base64 or url
+			// image data, either base64 or url
 			imageData = params.getString("data");
-			//which data type is that, defaults to base64
+			// which data type is that, defaults to base64
 			imageDataType = params.has("imageDataType") ? params
 					.getString("imageDataType") : DEFAULT_IMAGE_DATA_TYPE;
-			//which format should be used, defaults to jpg
+			// which format should be used, defaults to jpg
 			format = params.has("format") ? params.getString("format")
 					: DEFAULT_FORMAT;
-			//create the Bitmap object, needed for all functions
+			// create the Bitmap object, needed for all functions
 			bmp = getBitmap(imageData, imageDataType);
 		} catch (JSONException e) {
-			return new PluginResult(Status.JSON_EXCEPTION, e.getMessage());
+			callbackContext.error(e.getMessage());
+			return false;
 		} catch (IOException e) {
-			return new PluginResult(Status.ERROR, e.getMessage());
+			callbackContext.error(e.getMessage());
+			return false;
 		}
-		//resize the image
+		// resize the image
+		Log.d("PLUGIN", "passed init");
 		if (action.equals("resizeImage")) {
 			try {
 				double widthFactor;
 				double heightFactor;
 
-				//compression quality
+				// compression quality
 				int quality = params.getInt("quality");
 
-				//Pixels or Factor resize
+				// Pixels or Factor resize
 				String resizeType = params.getString("resizeType");
 
-				//Get width and height parameters
+				// Get width and height parameters
 				double width = params.getDouble("width");
 				double height = params.getDouble("height");
 
@@ -107,14 +110,16 @@ public class ImageResizePlugin extends Plugin {
 				}
 				byte[] b = baos.toByteArray();
 				String returnString = Base64.encodeToString(b, Base64.DEFAULT);
-				//return object
+				// return object
 				JSONObject res = new JSONObject();
 				res.put("imageData", returnString);
 				res.put("width", resized.getWidth());
 				res.put("height", resized.getHeight());
-				result = new PluginResult(Status.OK, res);
+				callbackContext.success(res);
+				return true;
 			} catch (JSONException e) {
-				result = new PluginResult(Status.JSON_EXCEPTION, e.getMessage());
+				callbackContext.error(e.getMessage());
+				return false;
 			}
 		} else if (action.equals("imageSize")) {
 			try {
@@ -122,9 +127,12 @@ public class ImageResizePlugin extends Plugin {
 				JSONObject res = new JSONObject();
 				res.put("width", bmp.getWidth());
 				res.put("height", bmp.getHeight());
-				result = new PluginResult(Status.OK, res);
+				Log.d("PLUGIN", "finished get image size");
+				callbackContext.success(res);
+				return true;
 			} catch (JSONException e) {
-				result = new PluginResult(Status.JSON_EXCEPTION, e.getMessage());
+				callbackContext.error(e.getMessage());
+				return false;
 			}
 		} else if (action.equals("storeImage")) {
 			try {
@@ -138,7 +146,7 @@ public class ImageResizePlugin extends Plugin {
 				int quality = params.getInt("quality");
 
 				OutputStream outStream;
-				//store the file locally using the external storage directory
+				// store the file locally using the external storage directory
 				File file = new File(Environment.getExternalStorageDirectory()
 						.toString() + directory, filename);
 				try {
@@ -154,16 +162,19 @@ public class ImageResizePlugin extends Plugin {
 					outStream.close();
 					JSONObject res = new JSONObject();
 					res.put("url", "file://" + file.getAbsolutePath());
-					result = new PluginResult(Status.OK, res);
+					callbackContext.success(res);
+					return true;
 				} catch (IOException e) {
-					result = new PluginResult(Status.ERROR, e.getMessage());
+					callbackContext.error(e.getMessage());
+					return false;
 				}
 			} catch (JSONException e) {
-				result = new PluginResult(Status.JSON_EXCEPTION, e.getMessage());
+				callbackContext.error(e.getMessage());
+				return false;
 			}
 		}
-
-		return result;
+		Log.d("PLUGIN", "unknown action");
+		return false;
 	}
 
 	public Bitmap getResizedBitmap(Bitmap bm, float widthFactor,

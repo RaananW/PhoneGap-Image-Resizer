@@ -1,4 +1,4 @@
-# Image Resizer plugin for Phonegap #
+# Image Resizer plugin for Phonegap/Cordova 2.1+ #
 
 The plugin will resize images natively using phonegap/cordova's plugin architecture
 
@@ -11,15 +11,19 @@ Using this plugin requires [PhoneGap](http://github.com/phonegap).
     &lt;script type="text/javascript" charset="utf-8" src="cordova???.js"&gt;&lt;/script&gt;<br/>
     &lt;script type="text/javascript" charset="utf-8" src="imageresize.js"&gt;&lt;/script&gt;
 
-2. For Android: Create a new package within your project called "com.webXells.ImageResizer" and move ImageResizePlugin.java into it. The add the following line to your config.xml (or for older phonegap in plugin.xml) : 
+2. For Android: Create a new package within your project called "com.webXells.ImageResizer" and move ImageResizePlugin.java into it. Then add the following line to your config.xml (or for older phonegap in plugin.xml) : 
 <pre>
     &lt;plugin name="com.webXells.imageResizer" value="com.webXells.ImageResizer.ImageResizePlugin" /&gt;
 </pre>
-3. For iOS : use the source from the iphone directory
+3. For iOS : add the following line to your config.xml after copying all classes to your classes folder:
+
+<pre>
+    &lt;plugin name="com.webXells.imageResizer" value="ImageResize" /&gt;
+</pre>
 
 ## Using the plugin ##
 
-The plugin creates the object `window.imageResizer`. For backward support, `window.plugins.imageResizer` still works.
+The plugin creates the object `window.imageResizer`. `window.plugins.imageResizer` still works for older versions.
 
 To use, call one of the following, available methods:
 
@@ -109,6 +113,10 @@ Store an image locally
 
 ## RELEASE NOTES ##
 
+### 15/04/2012 ###
+Android and iOS update, 2.1+ compatible. The application is not backwards-compatible, please either use older versions or a newer Phonegap :-)
+
+
 ### 27/10/2012 ###
 Updated to cordova 2.1, both js and android , iOS not yet.
 
@@ -118,7 +126,7 @@ Initial Release, For Now Only Android Plugin was uploaded, iOS coming soon.
 
 ### The MIT License
 
-Copyright (c) <2012> Raanan Weber, [webXells GmbH](http://www.webxells.com)
+Copyright (c) <2012-2013> Raanan Weber, [webXells GmbH](http://www.webxells.com)
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal

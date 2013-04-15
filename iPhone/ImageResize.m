@@ -5,7 +5,7 @@
 //  Created by Raanan Weber on 02.01.12.
 // 
 //  The software is open source, MIT Licensed.
-//  Copyright (c) 2012 webXells GmbH , http://www.webxells.com. All rights reserved.
+//  Copyright (c) 2012-2013 webXells GmbH , http://www.webxells.com. All rights reserved.
 //
 // Using the following Libraries (Big thanks to the developers!)
 // Image Scaling : http://iphonedevelopertips.com/graphics/how-to-scale-an-image-using-an-objective-c-category.html . Source is added with respected copyright.
@@ -20,13 +20,11 @@
 
 @synthesize callbackID;
 
--(void)resizeImage:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options  
+-(void)resizeImage:(CDVInvokedUrlCommand*)command 
 {
-    //The first argument in the arguments parameter is the callbackID.
-    //We use this to send data back to the successCallback or failureCallback
-    //through PluginResult.  
-    self.callbackID = [arguments pop];
     
+    NSDictionary *options = [command.arguments objectAtIndex:0];
+        
     CGFloat width = [[options objectForKey:@"width"] floatValue];  
     CGFloat height = [[options objectForKey:@"height"] floatValue];
     
@@ -58,26 +56,22 @@
     NSNumber *newwidth = [[NSNumber alloc] initWithInt:scaledImage.size.width];
     NSNumber *newheight = [[NSNumber alloc] initWithInt:scaledImage.size.height];
     NSDictionary* result = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:encodedString,newwidth,newheight,nil] forKeys:[NSArray arrayWithObjects: @"imageData", @"width", @"height", nil]];
-    
-#ifdef PHONEGAP_FRAMEWORK
-    PluginResult* pluginResult = [PluginResult resultWithStatus:PGCommandStatus_OK messageAsDictionary:result];
-#endif
-#ifdef CORDOVA_FRAMEWORK
-    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
-#endif
+
+    CDVPluginResult* pluginResult = nil;
         
     if(encodedString != nil)
     {
         //Call  the Success Javascript function
-        [self writeJavascript: [pluginResult toSuccessCallbackString:self.callbackID]];
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
     }else
     {    
         //Call  the Failure Javascript function
-        [self writeJavascript: [pluginResult toErrorCallbackString:self.callbackID]];    
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
     }
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
-- (UIImage*) getImageUsingOptions:(NSMutableDictionary*)options {
+- (UIImage*) getImageUsingOptions:(NSDictionary*)options {
     NSString *imageData = [options objectForKey:@"data"];
     NSString *imageDataType = [options objectForKey:@"imageDataType"] ?: @"base64Image";
     
@@ -91,23 +85,24 @@
     return img;
 }
 
--(void)imageSize:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options  
+-(void)imageSize:(CDVInvokedUrlCommand*)command
 {
-    self.callbackID = [arguments pop];
+    NSDictionary *options = [command.arguments objectAtIndex:0];
+    
     UIImage * img = [self getImageUsingOptions:options];   
     NSNumber *width = [[NSNumber alloc] initWithInt:img.size.width];
     NSNumber *height = [[NSNumber alloc] initWithInt:img.size.height];
     NSDictionary* dic = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:width,height,nil] forKeys:[NSArray arrayWithObjects: @"width", @"height", nil]];
-#ifdef PHONEGAP_FRAMEWORK
-    PluginResult* pluginResult = [PluginResult resultWithStatus:PGCommandStatus_OK messageAsDictionary:dic];
-#endif
-#ifdef CORDOVA_FRAMEWORK
+    
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:dic];
-#endif    
-    [self writeJavascript: [pluginResult toSuccessCallbackString:self.callbackID]];
+   
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
--(void)storeImage:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options {
+-(void)storeImage:(CDVInvokedUrlCommand*)command {
+    
+    NSDictionary *options = [command.arguments objectAtIndex:0];
+    
     UIImage * img = [self getImageUsingOptions:options];
     NSString *format =  [options objectForKey:@"format"] ?: @"jpg";
     NSString *filename =  [options objectForKey:@"filename"] ?: @"jpg";

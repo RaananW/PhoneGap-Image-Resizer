@@ -46,7 +46,7 @@ For Example:
 
 ### Android quirks and howto's ###
 
-Android 2.2+ is supported
+Android 2.3+ is supported
 
 The storeImage funtion will always store the image to the device's default external storage, under the given Directory and filename. the photoAlbum property will be ignored.
 
@@ -65,12 +65,12 @@ In the second case, only filename will be used and directory will be ignored.
 	
 ### resizeImage Doc ###
 <pre>
-  param success success callback, will receive the data sent from the native plugin
-  param fail error callback, will receive an error string describing what went wrong
-  param imageData The image data, either base64 or local url
-  param width width factor / width in pixels
-  param height height factor / height in pixels
-  param options extra options -  
+  param success : success callback, will receive the data sent from the native plugin
+  param fail : error callback, will receive an error string describing what went wrong
+  param imageData : The image data, either base64 or local url
+  param width : width factor / width in pixels
+  param height : height factor / height in pixels
+  param options : extra options -  
                format : file format to use (ImageResizer.FORMAT_JPG/ImageResizer.FORMAT_PNG) - defaults to JPG
                imageDataType : the data type (IMAGE_DATA_TYPE_BASE64/IMAGE_DATA_TYPE_URL) - defaults to Base64
                resizeType : type of the resize (RESIZE_TYPE_FACTOR/RESIZE_TYPE_PIXEL) - must be given
@@ -84,10 +84,10 @@ In the second case, only filename will be used and directory will be ignored.
 ### getImageSize Doc ###
 Get an image width and height
 <pre>
-  param success success callback, will receive the data sent from the native plugin
-  param fail error callback, will receive an error string describing what went wrong
-  param imageData The image data, either base64 or local url
-  param options extra options -  
+  param success : success callback, will receive the data sent from the native plugin
+  param fail : error callback, will receive an error string describing what went wrong
+  param imageData : The image data, either base64 or local url
+  param options : extra options -  
               imageDataType : the data type (IMAGE_DATA_TYPE_BASE64/IMAGE_DATA_TYPE_URL) - defaults to Base64
   returns JSON Object with the following parameters:
                height : height of the image
@@ -98,10 +98,10 @@ Get an image width and height
 
 Store an image locally
 <pre>
-  param success success callback, will receive the data sent from the native plugin
-  param fail error callback, will receive an error string describing what went wrong
-  param imageData The image data, either base64 or local url
-  param options extra options -  
+  param success : success callback, will receive the data sent from the native plugin
+  param fail : error callback, will receive an error string describing what went wrong
+  param imageData : The image data, either base64 or local url
+  param options : extra options -  
               format : file format to use (ImageResizer.FORMAT_JPG/ImageResizer.FORMAT_PNG) - defaults to JPG
               imageDataType : the data type (IMAGE_DATA_TYPE_BASE64/IMAGE_DATA_TYPE_URL) - defaults to Base64
               filename : filename to be stored, with ot without ending (if no ending given, format will be used) - must be given.

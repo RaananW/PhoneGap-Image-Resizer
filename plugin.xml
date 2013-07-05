@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  id="com.webXells.imageResizer"
+  version="1.0.0">
+
+  <name>ImageResizer</name>
+    
+  <description>
+    The plugin will resize images natively using phonegap/cordova's plugin architecture
+  </description>
+
+  <asset src="imageresize.js" target="imageresize.js" />
+
+    <engines>
+      <engine name="cordova" version=">=2.1.0" />
+    </engines>  
+    
+    <!-- android -->
+    <platform name="android">
+      <config-file target="res/xml/config.xml" parent="plugins">
+        <plugin name="com.webXells.imageResizer" value="com.webXells.ImageResizer.ImageResizePlugin" />
+      </config-file>
+
+      <source-file src="Android/com/webXells/ImageResizer/ImageResizePlugin.java" target-dir="src/com/webXells/ImageResizer/" />
+    </platform>
+
+    <!-- ios -->
+    <platform name="ios">
+    <!-- Cordova < 2.3 -->
+      <plugins-plist key="com.webXells.imageResizer" string="ImageResizer" />
+        
+    <!-- Cordova >= 2.3 -->
+      <config-file target="config.xml" parent="plugins">
+        <plugin name="com.webXells.imageResizer" value="ImageResizer"/>
+      </config-file>
+        
+      <source-file src="iPhone/ImageResize.m" />
+      <source-file src="iPhone/NSData+Base64.m" />
+      <source-file src="iPhone/UIImage+Scale.m" />
+      
+      <header-file src="iPhone/ImageResize.h" />
+      <header-file src="iPhone/NSData+Base64.h" />
+      <header-file src="iPhone/UIImage+Scale.h" />
+
+    </platform>
+</plugin>

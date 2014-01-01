@@ -18,6 +18,8 @@ ImageResizer.RESIZE_TYPE_FACTOR = "factorResize";
 ImageResizer.RESIZE_TYPE_PIXEL = "pixelResize";
 ImageResizer.FORMAT_JPG = "jpg";
 ImageResizer.FORMAT_PNG = "png";
+ImageResizer.DEFAULT_RESIZE_QUALITY = 70;
+ImageResizer.DEFAULT_STORE_QUALITY = 100;
 
 /**
  * Resize an image
@@ -45,13 +47,13 @@ ImageResizer.prototype.resizeImage = function(success, fail, imageData, width,
         data : imageData,
         width : width,
         height : height,
-        format : options.format,
-        imageDataType : options.imageType,
-        resizeType : options.resizeType,
-        quality : options.quality ? options.quality : 70
+        format : options.format ? options.format : ImageResizer.FORMAT_JPG,
+        imageDataType : options.imageType ? options.imageType : ImageResizer.IMAGE_DATA_TYPE_BASE64,
+        resizeType : options.resizeType ? options.resizeType : ImageResizer.RESIZE_TYPE_PIXEL,
+        quality : options.quality ? options.quality : ImageResizer.DEFAULT_RESIZE_QUALITY
     };
 
-    return cordova.exec(success, fail, "com.webXells.imageResizer",
+    return cordova.exec(success, fail, "ImageResizePlugin",
             "resizeImage", [params]);
 }
 /**
@@ -74,7 +76,7 @@ ImageResizer.prototype.getImageSize = function(success, fail, imageData,
         data : imageData,
         imageDataType : options.imageType 
     };
-    return cordova.exec(success, fail, "com.webXells.imageResizer",
+    return cordova.exec(success, fail, "ImageResizePlugin",
             "imageSize", [params]);
 }
 
@@ -100,15 +102,15 @@ ImageResizer.prototype.storeImage = function(success, fail, imageData, options) 
     }
     var params = {
         data : imageData,
-        format : options.format,
-        imageDataType : options.imageType,
+        format : options.format ? options.format : ImageResizer.FORMAT_JPG,
+        imageDataType : options.imageType ? options.imageType : ImageResizer.IMAGE_DATA_TYPE_BASE64,
         filename : options.filename,
         directory : options.directory,
-        quality : options.quality ? options.quality : 100,
-		photoAlbum : options.photoAlbum ? options.photoAlbum : true
+        quality : options.quality ? options.quality : ImageResizer.DEFAULT_STORE_QUALITY,
+		  photoAlbum : options.photoAlbum ? options.photoAlbum : true
     };
 
-    return cordova.exec(success, fail, "com.webXells.imageResizer",
+    return cordova.exec(success, fail, "ImageResizePlugin",
             "storeImage", [params]);
 }
 

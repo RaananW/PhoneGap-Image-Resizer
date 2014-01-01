@@ -30,7 +30,7 @@
     
     NSInteger quality = [[options objectForKey:@"quality"] integerValue];  
     
-    NSString *format =  [options objectForKey:@"format"] ?: @"jpg";
+    NSString *format =  [options objectForKey:@"format"];
     
     NSString *resizeType = [options objectForKey:@"resizeType"];
     
@@ -48,7 +48,7 @@
     if([format isEqualToString:@"png"]==YES) {
         imageDataObject = UIImagePNGRepresentation(scaledImage);
     } else {
-        imageDataObject = UIImageJPEGRepresentation(scaledImage, (quality/100));
+        imageDataObject = UIImageJPEGRepresentation(scaledImage, (quality/100.f));
     }
     
     NSString *encodedString = [imageDataObject base64EncodingWithLineLength:0];
@@ -73,7 +73,7 @@
 
 - (UIImage*) getImageUsingOptions:(NSDictionary*)options {
     NSString *imageData = [options objectForKey:@"data"];
-    NSString *imageDataType = [options objectForKey:@"imageDataType"] ?: @"base64Image";
+    NSString *imageDataType = [options objectForKey:@"imageDataType"];
     
     //Load the image
     UIImage * img = nil;
@@ -104,16 +104,16 @@
     NSDictionary *options = [command.arguments objectAtIndex:0];
     
     UIImage * img = [self getImageUsingOptions:options];
-    NSString *format =  [options objectForKey:@"format"] ?: @"jpg";
-    NSString *filename =  [options objectForKey:@"filename"] ?: @"jpg";
-    NSInteger quality = [[options objectForKey:@"quality"] integerValue] ?: 70; 
-    BOOL photoAlbum = [[options objectForKey:@"photoAlbum"] boolValue] ?: YES;
+    NSString *format =  [options objectForKey:@"format"];
+    NSString *filename =  [options objectForKey:@"filename"];
+    NSInteger quality = [[options objectForKey:@"quality"] integerValue]; 
+    BOOL photoAlbum = [[options objectForKey:@"photoAlbum"] boolValue];
     if(photoAlbum==YES) {
         UIImageWriteToSavedPhotosAlbum(img, self, @selector(imageSavedToPhotosAlbum:didFinishSavingWithError:contextInfo:), nil);
     } else {
         NSData* imageData = nil;
         if([format isEqualToString:@"jpg"]==YES) {
-            imageData = UIImageJPEGRepresentation(img, (quality/100));
+            imageData = UIImageJPEGRepresentation(img, (quality/100.f));
         } else {
             imageData = UIImagePNGRepresentation(img);
         }

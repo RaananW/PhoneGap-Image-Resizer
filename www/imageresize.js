@@ -124,11 +124,4 @@ ImageResizer.prototype.storeImage = function(success, fail, imageData, options) 
             "storeImage", [params]);
 }
 
-cordova.addConstructor(function() {
-	window.imageResizer = new ImageResizer();
-
-	// backwards compatibility	
-	window.plugins = window.plugins || {};
-	window.plugins.imageResizer = window.imageResizer;
-	console.log("Image Resizer Registered under window.imageResizer");
-});
+window.imageResizer = new ImageResizer();

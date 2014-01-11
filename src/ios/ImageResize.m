@@ -20,60 +20,82 @@
 
 @synthesize callbackID;
 
--(void)resizeImage:(CDVInvokedUrlCommand*)command 
-{
-    
+- (void) resizeImage:(CDVInvokedUrlCommand*)command {
     NSDictionary *options = [command.arguments objectAtIndex:0];
         
     CGFloat width = [[options objectForKey:@"width"] floatValue];  
     CGFloat height = [[options objectForKey:@"height"] floatValue];
-    
     NSInteger quality = [[options objectForKey:@"quality"] integerValue];  
-    
-    NSString *format =  [options objectForKey:@"format"] ?: @"jpg";
-    
+    NSString *format =  [options objectForKey:@"format"];
     NSString *resizeType = [options objectForKey:@"resizeType"];
-    
+    bool storeImage = [[options objectForKey:@"storeImage"] boolValue];
+    NSString *filename = [options objectForKey:@"filename"];
+    bool accountForPixelDensity = [[options objectForKey:@"pixelDensity"] boolValue];
+
     //Load the image
     UIImage * img = [self getImageUsingOptions:options];   
 
     UIImage *scaledImage = nil;
-    if([resizeType isEqualToString:@"factorResize"]==YES) {
-        scaledImage = [img scaleToSize:CGSizeMake(img.size.width * width, img.size.height * height)];
+    float newHeight;
+    float newWidth;
+    if ([resizeType isEqualToString:@"factorResize"] == YES) {
+        newWidth = img.size.width * width;
+        newHeight = img.size.height * height;
+    } else if ([resizeType isEqualToString:@"widthResize"] == YES) {
+        float scaleFactor = width / img.size.width;
+        newWidth = width;
+        newHeight = img.size.height * scaleFactor;
     } else {
-        scaledImage = [img scaleToSize:CGSizeMake(width, height)];
+        newWidth = width;
+        newHeight = height;
     }
-    
-    NSData* imageDataObject = nil;
-    if([format isEqualToString:@"png"]==YES) {
-        imageDataObject = UIImagePNGRepresentation(scaledImage);
-    } else {
-        imageDataObject = UIImageJPEGRepresentation(scaledImage, (quality/100));
+
+    //Double size for retina if option set to true
+    if (accountForPixelDensity && [[UIScreen mainScreen] respondsToSelector:@selector(scale)] && [[UIScreen mainScreen] scale] == 2.0) {
+       newWidth = newWidth * 2;
+       newHeight = newHeight * 2;
     }
-    
-    NSString *encodedString = [imageDataObject base64EncodingWithLineLength:0];
-    
-    NSNumber *newwidth = [[NSNumber alloc] initWithInt:scaledImage.size.width];
-    NSNumber *newheight = [[NSNumber alloc] initWithInt:scaledImage.size.height];
-    NSDictionary* result = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:encodedString,newwidth,newheight,nil] forKeys:[NSArray arrayWithObjects: @"imageData", @"width", @"height", nil]];
+
+    scaledImage = [img scaleToSize:CGSizeMake(newWidth, newHeight)];
+    NSNumber *newWidthObj = [[NSNumber alloc] initWithFloat:newWidth];
+    NSNumber *newHeightObj = [[NSNumber alloc] initWithFloat:newHeight];
 
     CDVPluginResult* pluginResult = nil;
+    if (storeImage) {
+        bool written = [self saveImage:scaledImage withOptions:options];
+        if (written) {
+            NSDictionary* result = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, newWidthObj, newHeightObj, nil] forKeys:[NSArray arrayWithObjects: @"filename", @"width", @"height", nil]];
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
+        } else {
+           pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+        }
+    } else {
+        NSData* imageDataObject = nil;
+        if ([format isEqualToString:@"png"] == YES) {
+            imageDataObject = UIImagePNGRepresentation(scaledImage);
+        } else {
+            imageDataObject = UIImageJPEGRepresentation(scaledImage, (quality/100.f));
+        }
+
+        NSString *encodedString = [imageDataObject base64EncodingWithLineLength:0];
         
-    if(encodedString != nil)
-    {
-        //Call  the Success Javascript function
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
-    }else
-    {    
-        //Call  the Failure Javascript function
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+        NSDictionary* result = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:encodedString, newWidthObj, newHeightObj, nil] forKeys:[NSArray arrayWithObjects: @"imageData", @"width", @"height", nil]];
+
+        if (encodedString != nil) {
+            //Call  the Success Javascript function
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
+        } else {
+            //Call  the Failure Javascript function
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+        }
     }
+    
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 - (UIImage*) getImageUsingOptions:(NSDictionary*)options {
     NSString *imageData = [options objectForKey:@"data"];
-    NSString *imageDataType = [options objectForKey:@"imageDataType"] ?: @"base64Image";
+    NSString *imageDataType = [options objectForKey:@"imageDataType"];
     
     //Load the image
     UIImage * img = nil;
@@ -85,8 +107,7 @@
     return img;
 }
 
--(void)imageSize:(CDVInvokedUrlCommand*)command
-{
+- (void) imageSize:(CDVInvokedUrlCommand*)command {
     NSDictionary *options = [command.arguments objectAtIndex:0];
     
     UIImage * img = [self getImageUsingOptions:options];   
@@ -99,43 +120,60 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
--(void)storeImage:(CDVInvokedUrlCommand*)command {
-    
+- (void) storeImage:(CDVInvokedUrlCommand*)command {
     NSDictionary *options = [command.arguments objectAtIndex:0];
-    
     UIImage * img = [self getImageUsingOptions:options];
-    NSString *format =  [options objectForKey:@"format"] ?: @"jpg";
-    NSString *filename =  [options objectForKey:@"filename"] ?: @"jpg";
-    NSInteger quality = [[options objectForKey:@"quality"] integerValue] ?: 70; 
-    BOOL photoAlbum = [[options objectForKey:@"photoAlbum"] boolValue] ?: YES;
-    if(photoAlbum==YES) {
+    [self saveImage:img withOptions:options];
+}
+
+- (bool) saveImage:(UIImage *)img withOptions:(NSDictionary *) options {
+	 NSString *format =  [options objectForKey:@"format"];
+    NSString *filename =  [options objectForKey:@"filename"];
+    NSString *directory =  [options objectForKey:@"directory"];
+    NSInteger quality = [[options objectForKey:@"quality"] integerValue]; 
+    bool photoAlbum = [[options objectForKey:@"photoAlbum"] boolValue];
+    if (photoAlbum == YES) {
         UIImageWriteToSavedPhotosAlbum(img, self, @selector(imageSavedToPhotosAlbum:didFinishSavingWithError:contextInfo:), nil);
+        return true;
     } else {
-        NSData* imageData = nil;
-        if([format isEqualToString:@"jpg"]==YES) {
-            imageData = UIImageJPEGRepresentation(img, (quality/100));
+        NSData* imageDataObject = nil;
+        if (![format isEqualToString:@"jpg"]) {
+            imageDataObject = UIImageJPEGRepresentation(img, (quality/100.f));
         } else {
-            imageData = UIImagePNGRepresentation(img);
+            imageDataObject = UIImagePNGRepresentation(img);
         }
         
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *documentsDirectory = [paths objectAtIndex:0];
-        
         NSMutableString* fullFileName = [NSMutableString stringWithString: documentsDirectory];
         
+        if (![directory isEqualToString:@""]) {
+            NSString *folderPath = [documentsDirectory stringByAppendingPathComponent:directory];
+            if (![[NSFileManager defaultManager] fileExistsAtPath:folderPath]) {
+                NSError *error = nil;
+                [[NSFileManager defaultManager] createDirectoryAtPath:folderPath withIntermediateDirectories:NO attributes:nil error:&error];
+            }
+            [fullFileName appendString:@"/"];
+            [fullFileName appendString:directory];
+        }
+
         [fullFileName appendString:@"/"];
         [fullFileName appendString:filename];
         NSRange r = [filename rangeOfString:format options:NSCaseInsensitiveSearch];
-        if(r.location == NSNotFound) {
+        if (r.location == NSNotFound) {
             [fullFileName appendString:@"."];
             [fullFileName appendString:format];
         }
-        NSLog(@"%@", fullFileName);
-        [imageData writeToFile:fullFileName atomically:YES];
+        NSError *error = nil;
+        bool written = [imageDataObject writeToFile:fullFileName options:NSDataWritingAtomic error:&error];
+        if (!written) {
+        	  NSLog(@"Write returned error: %@", [error localizedDescription]);
+        }
+        return written;
     }
 }
 
-- (void)imageSavedToPhotosAlbum:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
+- (void) imageSavedToPhotosAlbum:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
     NSString *message;
     NSString *title;
     if (!error) {

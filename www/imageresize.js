@@ -16,8 +16,11 @@ ImageResizer.IMAGE_DATA_TYPE_BASE64 = "base64Image";
 ImageResizer.IMAGE_DATA_TYPE_URL = "urlImage";
 ImageResizer.RESIZE_TYPE_FACTOR = "factorResize";
 ImageResizer.RESIZE_TYPE_PIXEL = "pixelResize";
+ImageResizer.RESIZE_TYPE_FIT_WIDTH = "widthResize";
 ImageResizer.FORMAT_JPG = "jpg";
 ImageResizer.FORMAT_PNG = "png";
+ImageResizer.DEFAULT_RESIZE_QUALITY = 70;
+ImageResizer.DEFAULT_STORE_QUALITY = 100;
 
 /**
  * Resize an image
@@ -29,10 +32,15 @@ ImageResizer.FORMAT_PNG = "png";
  * @param options extra options -  
  *              format : file format to use (ImageResizer.FORMAT_JPG/ImageResizer.FORMAT_PNG) - defaults to JPG
  *              imageDataType : the data type (IMAGE_DATA_TYPE_BASE64/IMAGE_DATA_TYPE_URL) - defaults to Base64
- *              resizeType : type of the resize (RESIZE_TYPE_FACTOR/RESIZE_TYPE_PIXEL) - must be given
- *              quality : INTEGER, compression quality - defaults to 70
+ *              resizeType : type of the resize (RESIZE_TYPE_FACTOR/RESIZE_TYPE_PIXEL/RESIZE_TYPE_FIT_WIDTH) - defaults to RESIZE_TYPE_PIXEL
+ *              quality : INTEGER, compression quality - defaults to DEFAULT_RESIZE_QUALITY
+ *					 storeImage : store resized image
+ * 				 pixelDensity : adjust image size for pixel density (retina on iOS)
+ * 				 directory : directory relative to temporary directory of the app to store image
+ * 				 filename : filename of stored resized image
+ * 				 photoAlbum : whether to store the image in the photo album (true) or temporary directory of the app (false)
  * @returns JSON Object with the following parameters:
- *              imageData : Base64 of the resized image
+ *              imageData : Base64 of the resized image || OR filename if storeImage = 1
  *              height : height of the resized image
  *              width: width of the resized image
  */
@@ -42,16 +50,21 @@ ImageResizer.prototype.resizeImage = function(success, fail, imageData, width,
         options = {}
     }
     var params = {
-        data : imageData,
-        width : width,
-        height : height,
-        format : options.format,
-        imageDataType : options.imageType,
-        resizeType : options.resizeType,
-        quality : options.quality ? options.quality : 70
+        data: imageData,
+        width: width ? height : 0,
+        height: height ? height : 0,
+        format: options.format ? options.format : ImageResizer.FORMAT_JPG,
+        imageDataType: options.imageType ? options.imageType : ImageResizer.IMAGE_DATA_TYPE_BASE64,
+        resizeType: options.resizeType ? options.resizeType : ImageResizer.RESIZE_TYPE_PIXEL,
+        quality: options.quality ? options.quality : ImageResizer.DEFAULT_RESIZE_QUALITY,
+        storeImage: (typeof options.storeImage !== "undefined") ? options.storeImage : 0,
+        pixelDensity: (typeof options.pixelDensity !== "undefined") ? options.pixelDensity : 1,
+        directory: options.directory ? options.directory : "",
+        filename: options.filename ? options.filename : "",
+        photoAlbum: (typeof options.photoAlbum !== "undefined") ? options.photoAlbum : 0
     };
 
-    return cordova.exec(success, fail, "com.webXells.imageResizer",
+    return cordova.exec(success, fail, "ImageResizePlugin",
             "resizeImage", [params]);
 }
 /**
@@ -68,13 +81,13 @@ ImageResizer.prototype.resizeImage = function(success, fail, imageData, width,
 ImageResizer.prototype.getImageSize = function(success, fail, imageData,
         options) {
     if (!options) {
-        options = {}
+        options = {};
     }
     var params = {
-        data : imageData,
-        imageDataType : options.imageType 
+        data: imageData,
+        imageDataType: options.imageType ? options.imageType : ImageResizer.IMAGE_DATA_TYPE_BASE64
     };
-    return cordova.exec(success, fail, "com.webXells.imageResizer",
+    return cordova.exec(success, fail, "ImageResizePlugin",
             "imageSize", [params]);
 }
 
@@ -86,11 +99,10 @@ ImageResizer.prototype.getImageSize = function(success, fail, imageData,
  * @param options extra options -  
  *              format : file format to use (ImageResizer.FORMAT_JPG/ImageResizer.FORMAT_PNG) - defaults to JPG
  *              imageDataType : the data type (IMAGE_DATA_TYPE_BASE64/IMAGE_DATA_TYPE_URL) - defaults to Base64
- *              filename : filename to be stored, with ot without ending (if no ending given, format will be used) - must be given.
- *              directory : in which directory should the file be stored - must be given
- *              quality : INTEGER, compression quality - defaults to 100
- *				photoAlbum : [iOS only] store the image in the temporary directory of the app, or in the photoAlbum (true for photoAlbum)
- *							 Note : in iOS only filename should be given, directory will be ignored.
+ *              quality : INTEGER, compression quality - defaults to DEFAULT_RESIZE_QUALITY
+ * 				 directory : directory relative to temporary directory of the app to store image
+ * 				 filename : filename of stored resized image
+ * 				 photoAlbum : whether to store the image in the photo album (true) or temporary directory of the app (false)
  * @returns JSON Object with the following parameters:
  *              url : URL of the file just stored
  */
@@ -99,16 +111,16 @@ ImageResizer.prototype.storeImage = function(success, fail, imageData, options) 
         options = {}
     }
     var params = {
-        data : imageData,
-        format : options.format,
-        imageDataType : options.imageType,
-        filename : options.filename,
-        directory : options.directory,
-        quality : options.quality ? options.quality : 100,
-		photoAlbum : options.photoAlbum ? options.photoAlbum : true
+        data: imageData,
+        format: options.format ? options.format : ImageResizer.FORMAT_JPG,
+        imageDataType: options.imageType ? options.imageType : ImageResizer.IMAGE_DATA_TYPE_BASE64,
+        filename: options.filename,
+        directory: options.directory,
+        quality: options.quality ? options.quality : ImageResizer.DEFAULT_STORE_QUALITY,
+		  photoAlbum: (typeof options.photoAlbum !== "undefined") ? options.photoAlbum : 1
     };
 
-    return cordova.exec(success, fail, "com.webXells.imageResizer",
+    return cordova.exec(success, fail, "ImageResizePlugin",
             "storeImage", [params]);
 }
 

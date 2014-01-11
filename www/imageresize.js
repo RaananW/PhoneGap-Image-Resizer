@@ -50,18 +50,18 @@ ImageResizer.prototype.resizeImage = function(success, fail, imageData, width,
         options = {}
     }
     var params = {
-        data : imageData,
-        width : width,
-        height : height ? height : 0,
-        format : options.format ? options.format : ImageResizer.FORMAT_JPG,
-        imageDataType : options.imageType ? options.imageType : ImageResizer.IMAGE_DATA_TYPE_BASE64,
-        resizeType : options.resizeType ? options.resizeType : ImageResizer.RESIZE_TYPE_PIXEL,
-        quality : options.quality ? options.quality : ImageResizer.DEFAULT_RESIZE_QUALITY,
-        storeImage : (typeof options.storeImage !== "undefined") ? options.storeImage : 0,
-        pixelDensity : (typeof options.pixelDensity !== "undefined") ? options.pixelDensity : 1,
-        directory : options.directory ? options.directory : "",
-        filename : options.filename ? options.filename : "",
-        photoAlbum : (typeof options.photoAlbum !== "undefined") ? options.photoAlbum : 0
+        data: imageData,
+        width: width ? height : 0,
+        height: height ? height : 0,
+        format: options.format ? options.format : ImageResizer.FORMAT_JPG,
+        imageDataType: options.imageType ? options.imageType : ImageResizer.IMAGE_DATA_TYPE_BASE64,
+        resizeType: options.resizeType ? options.resizeType : ImageResizer.RESIZE_TYPE_PIXEL,
+        quality: options.quality ? options.quality : ImageResizer.DEFAULT_RESIZE_QUALITY,
+        storeImage: (typeof options.storeImage !== "undefined") ? options.storeImage : 0,
+        pixelDensity: (typeof options.pixelDensity !== "undefined") ? options.pixelDensity : 1,
+        directory: options.directory ? options.directory : "",
+        filename: options.filename ? options.filename : "",
+        photoAlbum: (typeof options.photoAlbum !== "undefined") ? options.photoAlbum : 0
     };
 
     return cordova.exec(success, fail, "ImageResizePlugin",
@@ -81,11 +81,11 @@ ImageResizer.prototype.resizeImage = function(success, fail, imageData, width,
 ImageResizer.prototype.getImageSize = function(success, fail, imageData,
         options) {
     if (!options) {
-        options = {}
+        options = {};
     }
     var params = {
-        data : imageData,
-        imageDataType : options.imageType ? options.imageType : ImageResizer.IMAGE_DATA_TYPE_BASE64
+        data: imageData,
+        imageDataType: options.imageType ? options.imageType : ImageResizer.IMAGE_DATA_TYPE_BASE64
     };
     return cordova.exec(success, fail, "ImageResizePlugin",
             "imageSize", [params]);
@@ -111,13 +111,13 @@ ImageResizer.prototype.storeImage = function(success, fail, imageData, options) 
         options = {}
     }
     var params = {
-        data : imageData,
-        format : options.format ? options.format : ImageResizer.FORMAT_JPG,
-        imageDataType : options.imageType ? options.imageType : ImageResizer.IMAGE_DATA_TYPE_BASE64,
-        filename : options.filename,
-        directory : options.directory,
-        quality : options.quality ? options.quality : ImageResizer.DEFAULT_STORE_QUALITY,
-		  photoAlbum : (typeof options.photoAlbum !== "undefined") ? options.photoAlbum : 1
+        data: imageData,
+        format: options.format ? options.format : ImageResizer.FORMAT_JPG,
+        imageDataType: options.imageType ? options.imageType : ImageResizer.IMAGE_DATA_TYPE_BASE64,
+        filename: options.filename,
+        directory: options.directory,
+        quality: options.quality ? options.quality : ImageResizer.DEFAULT_STORE_QUALITY,
+		  photoAlbum: (typeof options.photoAlbum !== "undefined") ? options.photoAlbum : 1
     };
 
     return cordova.exec(success, fail, "ImageResizePlugin",

@@ -36,18 +36,26 @@
     UIImage * img = [self getImageUsingOptions:options];   
 
     UIImage *scaledImage = nil;
-    float newHeight;
-    float newWidth;
+    CGFloat newHeight;
+    CGFloat newWidth;
     if ([resizeType isEqualToString:@"factorResize"] == YES) {
         newWidth = img.size.width * width;
         newHeight = img.size.height * height;
-    } else if ([resizeType isEqualToString:@"widthResize"] == YES) {
-        float scaleFactor = width / img.size.width;
-        newWidth = width;
-        newHeight = img.size.height * scaleFactor;
     } else {
-        newWidth = width;
-        newHeight = height;
+    	  CGFloat widthFactor = width / img.size.width;
+    	  CGFloat heightFactor = height / img.size.height;
+    	  CGFloat scaleFactor = 0.0;
+    	  if (widthFactor == 0.0) {
+        	   scaleFactor = heightFactor;
+        } else if (heightFactor == 0.0) {
+        	   scaleFactor = widthFactor;
+        } else if (widthFactor > heightFactor) {
+            scaleFactor = heightFactor; // scale to fit height
+        } else {
+            scaleFactor = widthFactor; // scale to fit width
+        }
+        newWidth = img.size.width * scaleFactor;
+        newHeight = img.size.height * scaleFactor;
     }
 
     //Double size for retina if option set to true
@@ -67,25 +75,22 @@
             NSDictionary* result = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, newWidthObj, newHeightObj, nil] forKeys:[NSArray arrayWithObjects: @"filename", @"width", @"height", nil]];
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
         } else {
-           pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
         }
     } else {
         NSData* imageDataObject = nil;
-        if ([format isEqualToString:@"png"] == YES) {
-            imageDataObject = UIImagePNGRepresentation(scaledImage);
+        if ([format isEqualToString:@"jpg"]) {
+            imageDataObject = UIImageJPEGRepresentation(scaledImage, (quality/100.f));            
         } else {
-            imageDataObject = UIImageJPEGRepresentation(scaledImage, (quality/100.f));
+            imageDataObject = UIImagePNGRepresentation(scaledImage);
         }
 
         NSString *encodedString = [imageDataObject base64EncodingWithLineLength:0];
-        
         NSDictionary* result = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:encodedString, newWidthObj, newHeightObj, nil] forKeys:[NSArray arrayWithObjects: @"imageData", @"width", @"height", nil]];
 
         if (encodedString != nil) {
-            //Call  the Success Javascript function
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
         } else {
-            //Call  the Failure Javascript function
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
         }
     }
@@ -137,7 +142,7 @@
         return true;
     } else {
         NSData* imageDataObject = nil;
-        if (![format isEqualToString:@"jpg"]) {
+        if ([format isEqualToString:@"jpg"]) {
             imageDataObject = UIImageJPEGRepresentation(img, (quality/100.f));
         } else {
             imageDataObject = UIImagePNGRepresentation(img);

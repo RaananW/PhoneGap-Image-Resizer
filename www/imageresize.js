@@ -16,29 +16,26 @@ ImageResizer.IMAGE_DATA_TYPE_BASE64 = "base64Image";
 ImageResizer.IMAGE_DATA_TYPE_URL = "urlImage";
 ImageResizer.RESIZE_TYPE_FACTOR = "factorResize";
 ImageResizer.RESIZE_TYPE_PIXEL = "pixelResize";
-ImageResizer.RESIZE_TYPE_FIT_WIDTH = "widthResize";
 ImageResizer.FORMAT_JPG = "jpg";
 ImageResizer.FORMAT_PNG = "png";
-ImageResizer.DEFAULT_RESIZE_QUALITY = 70;
-ImageResizer.DEFAULT_STORE_QUALITY = 100;
 
 /**
  * Resize an image
- * @param success success callback, will receive the data sent from the native plugin
- * @param fail error callback, will receive an error string describing what went wrong
- * @param imageData The image data, either base64 or local url
- * @param width width factor / width in pixels
- * @param height height factor / height in pixels
+ * @param success - success callback, will receive the data sent from the native plugin
+ * @param fail - error callback, will receive an error string describing what went wrong
+ * @param imageData - The image data, either base64 or local url
+ * @param width - width factor / width in pixels (if one of height/width is 0, will resize to fit to the other while keeping aspect ratio)
+ * @param height - height factor / height in pixels
  * @param options extra options -  
  *              format : file format to use (ImageResizer.FORMAT_JPG/ImageResizer.FORMAT_PNG) - defaults to JPG
- *              imageDataType : the data type (IMAGE_DATA_TYPE_BASE64/IMAGE_DATA_TYPE_URL) - defaults to Base64
- *              resizeType : type of the resize (RESIZE_TYPE_FACTOR/RESIZE_TYPE_PIXEL/RESIZE_TYPE_FIT_WIDTH) - defaults to RESIZE_TYPE_PIXEL
- *              quality : INTEGER, compression quality - defaults to DEFAULT_RESIZE_QUALITY
+ *              imageDataType : the data type (IMAGE_DATA_TYPE_URL/IMAGE_DATA_TYPE_BASE64) - defaults to URL
+ *              resizeType : type of the resize (RESIZE_TYPE_PIXEL/RESIZE_TYPE_FACTOR) - defaults to RESIZE_TYPE_PIXEL
+ *              quality : INTEGER, compression quality - defaults to 75
  *					 storeImage : store resized image
- * 				 pixelDensity : adjust image size for pixel density (retina on iOS)
+ * 				 pixelDensity : adjust image size for pixel density (2x pixels for retina on iOS)
  * 				 directory : directory relative to temporary directory of the app to store image
  * 				 filename : filename of stored resized image
- * 				 photoAlbum : whether to store the image in the photo album (true) or temporary directory of the app (false)
+ * 				 photoAlbum : whether to store the image in the photo album (1) or temporary directory of the app (0)
  * @returns JSON Object with the following parameters:
  *              imageData : Base64 of the resized image || OR filename if storeImage = 1
  *              height : height of the resized image
@@ -54,9 +51,9 @@ ImageResizer.prototype.resizeImage = function(success, fail, imageData, width,
         width: width ? width : 0,
         height: height ? height : 0,
         format: options.format ? options.format : ImageResizer.FORMAT_JPG,
-        imageDataType: options.imageType ? options.imageType : ImageResizer.IMAGE_DATA_TYPE_BASE64,
+        imageDataType: options.imageType ? options.imageType : ImageResizer.IMAGE_DATA_TYPE_URL,
         resizeType: options.resizeType ? options.resizeType : ImageResizer.RESIZE_TYPE_PIXEL,
-        quality: options.quality ? options.quality : ImageResizer.DEFAULT_RESIZE_QUALITY,
+        quality: options.quality ? options.quality : 75,
         storeImage: (typeof options.storeImage !== "undefined") ? options.storeImage : 0,
         pixelDensity: (typeof options.pixelDensity !== "undefined") ? options.pixelDensity : 1,
         directory: options.directory ? options.directory : "",
@@ -73,7 +70,7 @@ ImageResizer.prototype.resizeImage = function(success, fail, imageData, width,
  * @param fail error callback, will receive an error string describing what went wrong
  * @param imageData The image data, either base64 or local url
  * @param options extra options -  
- *              imageDataType : the data type (IMAGE_DATA_TYPE_BASE64/IMAGE_DATA_TYPE_URL) - defaults to Base64
+ *              imageDataType : the data type (IMAGE_DATA_TYPE_URL/IMAGE_DATA_TYPE_BASE64) - defaults to URL
  * @returns JSON Object with the following parameters:
  *              height : height of the image
  *              width: width of the image
@@ -85,7 +82,7 @@ ImageResizer.prototype.getImageSize = function(success, fail, imageData,
     }
     var params = {
         data: imageData,
-        imageDataType: options.imageType ? options.imageType : ImageResizer.IMAGE_DATA_TYPE_BASE64
+        imageDataType: options.imageType ? options.imageType : ImageResizer.IMAGE_DATA_TYPE_URL
     };
     return cordova.exec(success, fail, "ImageResizePlugin",
             "imageSize", [params]);
@@ -98,8 +95,8 @@ ImageResizer.prototype.getImageSize = function(success, fail, imageData,
  * @param imageData The image data, either base64 or local url
  * @param options extra options -  
  *              format : file format to use (ImageResizer.FORMAT_JPG/ImageResizer.FORMAT_PNG) - defaults to JPG
- *              imageDataType : the data type (IMAGE_DATA_TYPE_BASE64/IMAGE_DATA_TYPE_URL) - defaults to Base64
- *              quality : INTEGER, compression quality - defaults to DEFAULT_RESIZE_QUALITY
+ *              imageDataType : the data type (IMAGE_DATA_TYPE_URL/IMAGE_DATA_TYPE_BASE64) - defaults to URL
+ *              quality : INTEGER, compression quality - defaults to 75
  * 				 directory : directory relative to temporary directory of the app to store image
  * 				 filename : filename of stored resized image
  * 				 photoAlbum : whether to store the image in the photo album (true) or temporary directory of the app (false)
@@ -113,10 +110,10 @@ ImageResizer.prototype.storeImage = function(success, fail, imageData, options) 
     var params = {
         data: imageData,
         format: options.format ? options.format : ImageResizer.FORMAT_JPG,
-        imageDataType: options.imageType ? options.imageType : ImageResizer.IMAGE_DATA_TYPE_BASE64,
+        imageDataType: options.imageType ? options.imageType : ImageResizer.IMAGE_DATA_TYPE_URL,
         filename: options.filename,
         directory: options.directory,
-        quality: options.quality ? options.quality : ImageResizer.DEFAULT_STORE_QUALITY,
+        quality: options.quality ? options.quality : 75,
 		  photoAlbum: (typeof options.photoAlbum !== "undefined") ? options.photoAlbum : 1
     };
 

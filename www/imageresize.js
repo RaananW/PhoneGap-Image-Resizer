@@ -1,3 +1,4 @@
+/*global cordova*/
 /**
  * An Image Resizer Plugin for PhoneGap. Updated to fit Cordova 2+
  * The JavaScript based plugin fits both the Android and the iOS native plugins.
@@ -15,7 +16,8 @@ var ImageResizer = function() {
 ImageResizer.IMAGE_DATA_TYPE_BASE64 = "base64Image";
 ImageResizer.IMAGE_DATA_TYPE_URL = "urlImage";
 ImageResizer.RESIZE_TYPE_FACTOR = "factorResize";
-ImageResizer.RESIZE_TYPE_PIXEL = "pixelResize";
+ImageResizer.RESIZE_TYPE_MIN_PIXEL = "minPixelResize";
+ImageResizer.RESIZE_TYPE_MAX_PIXEL = "maxPixelResize";
 ImageResizer.FORMAT_JPG = "jpg";
 ImageResizer.FORMAT_PNG = "png";
 
@@ -31,28 +33,28 @@ ImageResizer.FORMAT_PNG = "png";
  *              imageDataType : the data type (IMAGE_DATA_TYPE_URL/IMAGE_DATA_TYPE_BASE64) - defaults to URL
  *              resizeType : type of the resize (RESIZE_TYPE_PIXEL/RESIZE_TYPE_FACTOR) - defaults to RESIZE_TYPE_PIXEL
  *              quality : INTEGER, compression quality - defaults to 75
- *					 storeImage : store resized image
- * 				 pixelDensity : adjust image size for pixel density (2x pixels for retina on iOS)
- * 				 directory : directory relative to temporary directory of the app to store image
- * 				 filename : filename of stored resized image
- * 				 photoAlbum : whether to store the image in the photo album (1) or temporary directory of the app (0)
+ *              storeImage : store resized image
+ *              pixelDensity : adjust image size for pixel density (2x pixels for retina on iOS)
+ *              directory : directory relative to temporary directory of the app to store image
+ *              filename : filename of stored resized image
+ *              photoAlbum : whether to store the image in the photo album (1) or temporary directory of the app (0)
  * @returns JSON Object with the following parameters:
  *              imageData : Base64 of the resized image || OR filename if storeImage = 1
  *              height : height of the resized image
  *              width: width of the resized image
  */
-ImageResizer.prototype.resizeImage = function(success, fail, imageData, width,
-        height, options) {
+ImageResizer.prototype.resizeImage = function(success, fail, imageData, width, height, options) {
     if (!options) {
-        options = {}
+        options = {};
     }
+    
     var params = {
         data: imageData,
         width: width ? width : 0,
         height: height ? height : 0,
         format: options.format ? options.format : ImageResizer.FORMAT_JPG,
         imageDataType: options.imageType ? options.imageType : ImageResizer.IMAGE_DATA_TYPE_URL,
-        resizeType: options.resizeType ? options.resizeType : ImageResizer.RESIZE_TYPE_PIXEL,
+        resizeType: options.resizeType ? options.resizeType : ImageResizer.RESIZE_TYPE_MAX_PIXEL,
         quality: options.quality ? options.quality : 75,
         storeImage: (typeof options.storeImage !== "undefined") ? options.storeImage : 0,
         pixelDensity: (typeof options.pixelDensity !== "undefined") ? options.pixelDensity : 1,
@@ -61,9 +63,9 @@ ImageResizer.prototype.resizeImage = function(success, fail, imageData, width,
         photoAlbum: (typeof options.photoAlbum !== "undefined") ? options.photoAlbum : 0
     };
 
-    return cordova.exec(success, fail, "ImageResizePlugin",
-            "resizeImage", [params]);
-}
+    return cordova.exec(success, fail, "ImageResizePlugin", "resizeImage", [params]);
+};
+
 /**
  * Get an image width and height
  * @param success success callback, will receive the data sent from the native plugin
@@ -75,18 +77,18 @@ ImageResizer.prototype.resizeImage = function(success, fail, imageData, width,
  *              height : height of the image
  *              width: width of the image
  */
-ImageResizer.prototype.getImageSize = function(success, fail, imageData,
-        options) {
+ImageResizer.prototype.getImageSize = function(success, fail, imageData, options) {
     if (!options) {
         options = {};
     }
+    
     var params = {
         data: imageData,
         imageDataType: options.imageType ? options.imageType : ImageResizer.IMAGE_DATA_TYPE_URL
     };
-    return cordova.exec(success, fail, "ImageResizePlugin",
-            "imageSize", [params]);
-}
+    
+    return cordova.exec(success, fail, "ImageResizePlugin", "imageSize", [params]);
+};
 
 /**
  * Store an image locally
@@ -97,16 +99,17 @@ ImageResizer.prototype.getImageSize = function(success, fail, imageData,
  *              format : file format to use (ImageResizer.FORMAT_JPG/ImageResizer.FORMAT_PNG) - defaults to JPG
  *              imageDataType : the data type (IMAGE_DATA_TYPE_URL/IMAGE_DATA_TYPE_BASE64) - defaults to URL
  *              quality : INTEGER, compression quality - defaults to 75
- * 				 directory : directory relative to temporary directory of the app to store image
- * 				 filename : filename of stored resized image
- * 				 photoAlbum : whether to store the image in the photo album (true) or temporary directory of the app (false)
+ *              directory : directory relative to temporary directory of the app to store image
+ *              filename : filename of stored resized image
+ *              photoAlbum : whether to store the image in the photo album (true) or temporary directory of the app (false)
  * @returns JSON Object with the following parameters:
  *              url : URL of the file just stored
  */
 ImageResizer.prototype.storeImage = function(success, fail, imageData, options) {
     if (!options) {
-        options = {}
+        options = {};
     }
+    
     var params = {
         data: imageData,
         format: options.format ? options.format : ImageResizer.FORMAT_JPG,
@@ -114,11 +117,11 @@ ImageResizer.prototype.storeImage = function(success, fail, imageData, options) 
         filename: options.filename,
         directory: options.directory,
         quality: options.quality ? options.quality : 75,
-		  photoAlbum: (typeof options.photoAlbum !== "undefined") ? options.photoAlbum : 1
+        photoAlbum: (typeof options.photoAlbum !== "undefined") ? options.photoAlbum : 1
     };
 
-    return cordova.exec(success, fail, "ImageResizePlugin",
-            "storeImage", [params]);
-}
+    return cordova.exec(success, fail, "ImageResizePlugin", "storeImage", [params]);
+};
 
+window.ImageResizer = ImageResizer;
 window.imageResizer = new ImageResizer();

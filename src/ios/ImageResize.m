@@ -41,11 +41,24 @@
     if ([resizeType isEqualToString:@"factorResize"] == YES) {
         newWidth = img.size.width * width;
         newHeight = img.size.height * height;
+    } else if ([resizeType isEqualToString:@"minPixelResize"] == YES) {
+        CGFloat widthFactor = width/img.size.width;
+        CGFloat heightFactor = height/img.size.height;
+        CGFloat scaleFactor = 0.0;
+        if (widthFactor > heightFactor && widthFactor <= 1.0) {
+            scaleFactor = widthFactor;
+        } else if (heightFactor <= 1.0) {
+            scaleFactor = heightFactor;
+        } else {
+            scaleFactor = 1.0;
+        }
+        newWidth = img.size.width * scaleFactor;
+        newHeight = img.size.height * scaleFactor;
     } else {
-    	  CGFloat widthFactor = width / img.size.width;
-    	  CGFloat heightFactor = height / img.size.height;
-    	  CGFloat scaleFactor = 0.0;
-    	  if (widthFactor == 0.0) {
+        CGFloat widthFactor = width / img.size.width;
+        CGFloat heightFactor = height / img.size.height;
+        CGFloat scaleFactor = 0.0;
+        if (widthFactor == 0.0) {
         	   scaleFactor = heightFactor;
         } else if (heightFactor == 0.0) {
         	   scaleFactor = widthFactor;

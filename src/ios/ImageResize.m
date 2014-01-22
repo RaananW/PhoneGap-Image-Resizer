@@ -33,7 +33,7 @@
     bool accountForPixelDensity = [[options objectForKey:@"pixelDensity"] boolValue];
 
     //Load the image
-    UIImage * img = [self getImageUsingOptions:options];   
+    UIImage *img = [self getImageUsingOptions:options];   
 
     UIImage *scaledImage = nil;
     CGFloat newHeight;
@@ -116,11 +116,11 @@
     NSString *imageDataType = [options objectForKey:@"imageDataType"];
     
     //Load the image
-    UIImage * img = nil;
+    UIImage *img = nil;
     if([imageDataType isEqualToString:@"base64Image"]==YES) {
         img = [[UIImage alloc] initWithData:[NSData dataWithBase64EncodedString:imageData]];
     } else {
-        img = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageData]]];
+        img = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:[NSURL fileURLWithPath:imageData]]];
     }
     return img;
 }

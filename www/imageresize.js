@@ -44,6 +44,7 @@ ImageResizer.FORMAT_PNG = "png";
  *              width: width of the resized image
  */
 ImageResizer.prototype.resizeImage = function(success, fail, imageData, width, height, options) {
+	var fileFormat, supportedFormats = ['jpg', 'jpeg', 'png'];
     if (!options) {
         options = {};
     }
@@ -63,6 +64,12 @@ ImageResizer.prototype.resizeImage = function(success, fail, imageData, width, h
         photoAlbum: (typeof options.photoAlbum !== "undefined") ? options.photoAlbum : 0
     };
 
+	if (params.filename && params.filename.indexOf('.') > -1) {
+    	fileFormat = params.filename.substring(params.filename.lastIndexOf('.') + 1, params.filename.length);
+    	if (supportedFormats.indexOf(fileFormat.toLowerCase())) {
+    		params.format = fileFormat.toLowerCase();
+    	}
+    }
     return cordova.exec(success, fail, "ImageResizePlugin", "resizeImage", [params]);
 };
 

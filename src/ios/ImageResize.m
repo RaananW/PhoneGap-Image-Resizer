@@ -73,8 +73,13 @@
 
     //Double size for retina if option set to true
     if (accountForPixelDensity && [[UIScreen mainScreen] respondsToSelector:@selector(scale)] && [[UIScreen mainScreen] scale] == 2.0) {
-       newWidth = newWidth * 2;
-       newHeight = newHeight * 2;
+        if (img.size.width > newWidth * 2 && img.size.height > newHeight * 2) {
+            newWidth = newWidth * 2;
+            newHeight = newHeight * 2;
+        } else {
+            newWidth = img.size.width;
+            newHeight = img.size.height;
+        }
     }
 
     scaledImage = [img scaleToSize:CGSizeMake(newWidth, newHeight)];

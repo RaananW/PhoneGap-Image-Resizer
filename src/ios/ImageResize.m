@@ -98,7 +98,7 @@
     } else {
         NSData* imageDataObject = nil;
         if ([format isEqualToString:@"jpg"]) {
-            imageDataObject = UIImageJPEGRepresentation(scaledImage, (quality/100.f));            
+            imageDataObject = UIImageJPEGRepresentation(scaledImage, (quality/100.f));
         } else {
             imageDataObject = UIImagePNGRepresentation(scaledImage);
         }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
   xmlns:android="http://schemas.android.com/apk/res/android"
-  id="com.webXells.imageResizer"
+  id="com.synconset.imageResizer"
   version="1.0.0">
 
 	<name>ImageResizer</name>
@@ -38,12 +38,12 @@
 
 	<!-- android -->
 	<platform name="android">
-		<config-file target="AndroidManifest.xml" parent="/manifest/application">
+		<config-file target="config.xml" parent="/*">
 			<feature name="ImageResizePlugin">
-				<param name="android-package" value="com.webXells.ImageResizer.ImageResizePlugin"/>
+				<param name="android-package" value="com.synconset.ImageResizePlugin"/>
 			</feature>
 		</config-file>
 
-		<source-file src="src/Android/com/webXells/ImageResizer/ImageResizePlugin.java" target-dir="src/com/phonegap/Plugins/ImageResizer/" />
+		<source-file src="src/Android/com/synconset/ImageResizer/ImageResizePlugin.java" target-dir="src/com/synconset" />
 	</platform>
 </plugin>

@@ -65,10 +65,10 @@ ImageResizer.prototype.resizeImage = function(success, fail, imageData, width, h
     };
 
 	if (params.filename && params.filename.indexOf('.') > -1) {
-    	fileFormat = params.filename.substring(params.filename.lastIndexOf('.') + 1, params.filename.length);
-    	if (supportedFormats.indexOf(fileFormat.toLowerCase())) {
-    		params.format = fileFormat.toLowerCase();
-    	}
+        fileFormat = params.filename.substring(params.filename.lastIndexOf('.') + 1, params.filename.length);
+        if (supportedFormats.indexOf(fileFormat.toLowerCase())) {
+            params.format = fileFormat.toLowerCase();
+        }
     }
     return cordova.exec(success, fail, "ImageResizePlugin", "resizeImage", [params]);
 };

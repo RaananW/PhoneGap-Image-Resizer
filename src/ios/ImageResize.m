@@ -98,7 +98,7 @@
     } else {
         NSData* imageDataObject = nil;
         if ([format isEqualToString:@"jpg"]) {
-            imageDataObject = UIImageJPEGRepresentation(scaledImage, (quality/100.f));            
+            imageDataObject = UIImageJPEGRepresentation(scaledImage, (quality/100.f));
         } else {
             imageDataObject = UIImagePNGRepresentation(scaledImage);
         }
@@ -150,7 +150,7 @@
 }
 
 - (bool) saveImage:(UIImage *)img withOptions:(NSDictionary *) options {
-	 NSString *format =  [options objectForKey:@"format"];
+    NSString *format =  [options objectForKey:@"format"];
     NSString *filename =  [options objectForKey:@"filename"];
     NSString *directory =  [options objectForKey:@"directory"];
     NSInteger quality = [[options objectForKey:@"quality"] integerValue]; 

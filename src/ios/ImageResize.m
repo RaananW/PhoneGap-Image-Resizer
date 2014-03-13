@@ -168,16 +168,16 @@
         
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *documentsDirectory = [paths objectAtIndex:0];
-        NSMutableString* fullFileName = [NSMutableString stringWithString: documentsDirectory];
         
+        NSMutableString* fullFileName;
         if (![directory isEqualToString:@""]) {
-            NSString *folderPath = [documentsDirectory stringByAppendingPathComponent:directory];
-            if (![[NSFileManager defaultManager] fileExistsAtPath:folderPath]) {
+            fullFileName = [NSMutableString stringWithString: directory];
+            if (![[NSFileManager defaultManager] fileExistsAtPath:fullFileName]) {
                 NSError *error = nil;
-                [[NSFileManager defaultManager] createDirectoryAtPath:folderPath withIntermediateDirectories:NO attributes:nil error:&error];
+                [[NSFileManager defaultManager] createDirectoryAtPath:fullFileName withIntermediateDirectories:NO attributes:nil error:&error];
             }
-            [fullFileName appendString:@"/"];
-            [fullFileName appendString:directory];
+        } else {
+            fullFileName = [NSMutableString stringWithString: documentsDirectory];
         }
 
         [fullFileName appendString:@"/"];

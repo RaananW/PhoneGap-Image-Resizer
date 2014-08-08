@@ -28,6 +28,7 @@
 - (void) resizeImage:(CDVInvokedUrlCommand*)command;
 - (void) imageSize:(CDVInvokedUrlCommand*)command;
 - (void) storeImage:(CDVInvokedUrlCommand*)command;
+- (bool) saveImage:(UIImage *)image withOptions:(NSDictionary *) options;
 - (void) imageSavedToPhotosAlbum:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)none;
 - (UIImage*) getImageUsingOptions:(NSDictionary*)options;
 

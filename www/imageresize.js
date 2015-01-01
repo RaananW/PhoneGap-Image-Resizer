@@ -54,7 +54,7 @@ ImageResizer.prototype.resizeImage = function(success, fail, imageData, width, h
         width: width ? width : 0,
         height: height ? height : 0,
         format: options.format ? options.format : ImageResizer.FORMAT_JPG,
-        imageDataType: options.imageType ? options.imageType : ImageResizer.IMAGE_DATA_TYPE_URL,
+        imageDataType: options.imageDataType ? options.imageDataType : ImageResizer.IMAGE_DATA_TYPE_URL,
         resizeType: options.resizeType ? options.resizeType : ImageResizer.RESIZE_TYPE_MAX_PIXEL,
         quality: options.quality ? options.quality : 75,
         storeImage: (typeof options.storeImage !== "undefined") ? options.storeImage : 0,
@@ -91,7 +91,7 @@ ImageResizer.prototype.getImageSize = function(success, fail, imageData, options
     
     var params = {
         data: imageData,
-        imageDataType: options.imageType ? options.imageType : ImageResizer.IMAGE_DATA_TYPE_URL
+        imageDataType: options.imageDataType ? options.imageDataType : ImageResizer.IMAGE_DATA_TYPE_URL
     };
     
     return cordova.exec(success, fail, "ImageResizePlugin", "imageSize", [params]);
@@ -120,7 +120,7 @@ ImageResizer.prototype.storeImage = function(success, fail, imageData, options) 
     var params = {
         data: imageData,
         format: options.format ? options.format : ImageResizer.FORMAT_JPG,
-        imageDataType: options.imageType ? options.imageType : ImageResizer.IMAGE_DATA_TYPE_URL,
+        imageDataType: options.imageDataType ? options.imageDataType : ImageResizer.IMAGE_DATA_TYPE_URL,
         filename: options.filename,
         directory: options.directory,
         quality: options.quality ? options.quality : 75,

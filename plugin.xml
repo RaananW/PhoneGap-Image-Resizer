@@ -13,6 +13,8 @@
 	<engines>
 		<engine name="cordova" version=">=3.0.0" />
 	</engines>  
+	
+	<dependency id="org.apache.cordova.file" version="1.0.1" />
 
 	<js-module src="www/imageresize.js" name="ImageResizePlugin">
 		<clobbers target="plugins.imageResizer" />

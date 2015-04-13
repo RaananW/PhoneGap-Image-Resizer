@@ -39,7 +39,7 @@ ImageResizer.FORMAT_PNG = "png";
  *              filename : filename of stored resized image
  *              photoAlbum : whether to store the image in the photo album (1) or temporary directory of the app (0)
  * @returns JSON Object with the following parameters:
- *              imageData : Base64 of the resized image || OR filename if storeImage = 1
+ *              imageData : Base64 of the resized image || OR filename if storeImage = true
  *              height : height of the resized image
  *              width: width of the resized image
  */
@@ -57,11 +57,11 @@ ImageResizer.prototype.resizeImage = function(success, fail, imageData, width, h
         imageDataType: options.imageDataType ? options.imageDataType : ImageResizer.IMAGE_DATA_TYPE_URL,
         resizeType: options.resizeType ? options.resizeType : ImageResizer.RESIZE_TYPE_MAX_PIXEL,
         quality: options.quality ? options.quality : 75,
-        storeImage: (typeof options.storeImage !== "undefined") ? options.storeImage : 0,
-        pixelDensity: (typeof options.pixelDensity !== "undefined") ? options.pixelDensity : 1,
+        storeImage: (typeof options.storeImage !== "undefined") ? options.storeImage : false,
+        pixelDensity: (typeof options.pixelDensity !== "undefined") ? options.pixelDensity : true,
         directory: options.directory ? options.directory : "",
         filename: options.filename ? options.filename : "",
-        photoAlbum: (typeof options.photoAlbum !== "undefined") ? options.photoAlbum : 0
+        photoAlbum: (typeof options.photoAlbum !== "undefined") ? options.photoAlbum : false
     };
 
 	if (params.filename && params.filename.indexOf('.') > -1) {

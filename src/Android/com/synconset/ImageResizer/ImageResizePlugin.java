@@ -1,13 +1,13 @@
 /**
  * An Image Resizer Plugin for Cordova/PhoneGap.
- *
+ * 
  * More Information : https://github.com/raananw/
- *
+ * 
  * The android version of the file stores the images using the local storage.
- *
+ * 
  * The software is open source, MIT Licensed.
  * Copyright (C) 2012, webXells GmbH All Rights Reserved.
- *
+ * 
  * @author Raanan Weber, webXells GmbH, http://www.webxells.com
  */
 package com.synconset;
@@ -49,7 +49,7 @@ public class ImageResizePlugin extends CordovaPlugin {
     public static final String DEFAULT_FORMAT = "jpg";
     public static final String DEFAULT_IMAGE_DATA_TYPE = IMAGE_DATA_TYPE_BASE64;
     public static final String DEFAULT_RESIZE_TYPE = RESIZE_TYPE_FACTOR;
-    
+
     @Override
     public boolean execute(String action, JSONArray data, CallbackContext callbackContext) throws JSONException {
         JSONObject params = data.getJSONObject(0);
@@ -116,10 +116,10 @@ public class ImageResizePlugin extends CordovaPlugin {
             OutputStream outStream = new FileOutputStream(file);
             if (format.equals(FORMAT_PNG)) {
                 bmp.compress(Bitmap.CompressFormat.PNG, quality,
-                             outStream);
+                        outStream);
             } else {
                 bmp.compress(Bitmap.CompressFormat.JPEG, quality,
-                             outStream);
+                        outStream);
             }
             outStream.flush();
             outStream.close();
@@ -199,7 +199,7 @@ public class ImageResizePlugin extends CordovaPlugin {
                 float reqWidth = options.outWidth * sizes[0];
                 float reqHeight = options.outHeight * sizes[1];
                 int inSampleSize = calculateInSampleSize(options, (int)reqWidth, (int)reqHeight);
-                
+        
                 options = new BitmapFactory.Options();
                 options.inSampleSize = inSampleSize;
                 Bitmap bmp = getBitmap(imageData, imageDataType, options);
@@ -209,8 +209,8 @@ public class ImageResizePlugin extends CordovaPlugin {
                 
                 sizes = calculateFactors(params, options.outWidth, options.outHeight);
                 bmp = getResizedBitmap(bmp, sizes[0], sizes[1]);
-                
-                if (params.getInt("storeImage") == 1) {
+                        
+                if (params.getBoolean("storeImage")) {
                     storeImage(params, format, bmp, callbackContext);
                 } else {
                     int quality = params.getInt("quality");
@@ -250,7 +250,7 @@ public class ImageResizePlugin extends CordovaPlugin {
             matrix.postScale(widthFactor, heightFactor);
             // recreate the new Bitmap
             Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height,
-                                                       matrix, false);
+                    matrix, false);
             return resizedBitmap;
         }
         
@@ -259,18 +259,18 @@ public class ImageResizePlugin extends CordovaPlugin {
             final int height = options.outHeight;
             final int width = options.outWidth;
             int inSampleSize = 1;
-            
+        
             if (height > reqHeight || width > reqWidth) {
                 final int halfHeight = height / 2;
                 final int halfWidth = width / 2;
-                
+        
                 // Calculate the largest inSampleSize value that is a power of 2 and keeps both
                 // height and width larger than the requested height and width.
                 while ((halfHeight / inSampleSize) > reqHeight && (halfWidth / inSampleSize) > reqWidth) {
                     inSampleSize *= 2;
                 }
             }
-            
+        
             return inSampleSize;
         }
         
@@ -309,7 +309,7 @@ public class ImageResizePlugin extends CordovaPlugin {
                 heightFactor = desiredHeight;
             }
             
-            if (params.getInt("pixelDensity") == 1) {
+            if (params.getBoolean("pixelDensity")) {
                 DisplayMetrics metrics = cordova.getActivity().getResources().getDisplayMetrics();
                 if (metrics.density > 1) {
                     if (widthFactor * metrics.density < 1.0 && heightFactor * metrics.density < 1.0) {

@@ -170,6 +170,7 @@
     NSString *format =  [options objectForKey:@"format"];
     NSString *filename =  [options objectForKey:@"filename"];
     NSString *directory =  [options objectForKey:@"directory"];
+    directory = [self getUrl:directory];
     NSInteger quality = [[options objectForKey:@"quality"] integerValue];
     bool photoAlbum = [[options objectForKey:@"photoAlbum"] boolValue];
     if (photoAlbum == YES) {

@@ -132,3 +132,4 @@ ImageResizer.prototype.storeImage = function(success, fail, imageData, options) 
 
 window.ImageResizer = ImageResizer;
 window.imageResizer = new ImageResizer();
+module.exports = new ImageResizer();

@@ -47,8 +47,10 @@ The storeImage funtion will always store the image to the device's default exter
 ### iOS quirks and howto's ###
 
 For a full iOS integration, two extra extensions should be used:
+
 1. Base64 Encoder/Decoder using Dave Wimer implementation (http://colloquy.info/project/browser/trunk/NSDataAdditions.h?rev=1576)
 2. Image Scaling for UIImage (Using the great howto guide here : http://iphonedevelopertips.com/graphics/how-to-scale-an-image-using-an-objective-c-category.html )
+
 The sources are added to the github.
 
 The storeImage function in iOS saves either in the photo album, or in the application's temporary directory. 

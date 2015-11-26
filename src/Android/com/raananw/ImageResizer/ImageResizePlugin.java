@@ -221,7 +221,7 @@ public class ImageResizePlugin extends CordovaPlugin {
                         bmp.compress(Bitmap.CompressFormat.JPEG, quality, baos);
                     }
                     byte[] b = baos.toByteArray();
-                    String returnString = Base64.encodeToString(b, Base64.DEFAULT);
+                    String returnString = Base64.encodeToString(b, Base64.NO_WRAP);
                     // return object
                     JSONObject res = new JSONObject();
                     res.put("imageData", returnString);

@@ -28,15 +28,20 @@ To use, call one of the following, available methods:
 ```
 
 For Example:
-<pre>
-    window.imageResizer.resizeImage(
-      function(data) { 
-        var image = document.getElementById('myImage');
-        image.src = "data:image/jpeg;base64," + data.imageData; 
-      }, function (error) {
-        console.log("Error : \r\n" + error);
-      }, imageDataInBase64, 0.5, 0.5, {resizeType:ImageResizer.RESIZE_TYPE_FACTOR ,format:'jpg'});
-</pre>
+```javascript
+window.imageResizer.resizeImage(
+   function(data) { 
+     var image = document.getElementById('myImage');
+     image.src = "data:image/jpeg;base64," + data.imageData; 
+   }, function (error) {
+     console.log("Error : \r\n" + error);
+   }, imageDataInBase64, 0.5, 0.5, {
+      resizeType: ImageResizer.RESIZE_TYPE_FACTOR,
+      imageDataType: ImageResizer.IMAGE_DATA_TYPE_BASE64,
+      format: ImageResizer.FORMAT_JPG
+   }
+);
+```
 
 ### Android quirks and howto's ###
 

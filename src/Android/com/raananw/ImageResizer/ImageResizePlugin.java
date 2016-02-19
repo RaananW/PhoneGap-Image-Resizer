@@ -10,7 +10,7 @@
  * 
  * @author Raanan Weber, webXells GmbH, http://www.webxells.com
  */
-package com.synconset;
+package com.raananw;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -221,7 +221,7 @@ public class ImageResizePlugin extends CordovaPlugin {
                         bmp.compress(Bitmap.CompressFormat.JPEG, quality, baos);
                     }
                     byte[] b = baos.toByteArray();
-                    String returnString = Base64.encodeToString(b, Base64.DEFAULT);
+                    String returnString = Base64.encodeToString(b, Base64.NO_WRAP);
                     // return object
                     JSONObject res = new JSONObject();
                     res.put("imageData", returnString);

@@ -1,0 +1,35 @@
+{
+  "name": "cordova-plugin-image-resizer",
+  "version": "1.0.0",
+  "description": "Cordova / Phonegap plugin for resizing images",
+  "cordova": {
+    "id": "cordova-plugin-image-resizer",
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wymsee/cordova-imageResizer.git"
+  },
+  "keywords": [
+    "cordova",
+    "device",
+    "ecosystem:cordova",
+    "cordova-ios",
+    "cordova-android"
+  ],
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.0.0"
+    }
+  ],
+  "author": "Wymsee",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wymsee/cordova-imageResizer/issues"
+  },
+  "homepage": "https://github.com/wymsee/cordova-imageResizer#readme"
+}

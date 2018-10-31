@@ -1,3 +1,5 @@
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FRaananW%2FPhoneGap-Image-Resizer.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FRaananW%2FPhoneGap-Image-Resizer?ref=badge_shield)
+
 * NOTE - I am sorry, I just can't find the time to fully test the plugin and develop it further. Small updates are constantly integrated. *
 
 # Image Resizer plugin for Phonegap/Cordova 3.0+ #
@@ -84,3 +86,6 @@ Copyright (c) 2012-2015 Raanan Weber (raananw@gmail.com)
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FRaananW%2FPhoneGap-Image-Resizer.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FRaananW%2FPhoneGap-Image-Resizer?ref=badge_large)
